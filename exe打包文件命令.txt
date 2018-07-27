@@ -1,0 +1,1 @@
+pyinstaller --hidden-import=queue -F -w -i ..\..\..\icon\ico1.ico ..\..\..\TotalWindows.py
