@@ -79,15 +79,17 @@ HW_BAS_Result = []
 while Part_Num < len(Data_Init):
     Data_Mid_1 = re.split('\(|\)|Type:|MTU:|\s+', Data_Init[Part_Num])
     Port_Instance = Port_Info(Dev_Name)
-    Port_Info.Dev_Ports = Data_Mid_1[3]
-    Port_Info.Dev_V4_IP = Data_Mid_1[1]
-    if 'LoopBack' in Port_Info.Dev_Ports:
-        Port_Info.Port_Flag = 0
+    Port_Instance.Dev_Ports = Data_Mid_1[3]
+    Port_Instance.Dev_V4_IP = Data_Mid_1[1]
+    if 'LoopBack' in Port_Instance.Dev_Ports:
+        Port_Instance.Port_Flag = 0
     else:
-        Port_Info.Port_Flag = 1
-    Port_Info.OSPF_Type = Data_Mid_1[11]
-    HW_BAS_Result.append(Port_Info)
+        Port_Instance.Port_Flag = 1
+    Port_Instance.OSPF_Type = Data_Mid_1[11]
+    HW_BAS_Result.append(Port_Instance)
     Part_Num += 1
+
+print(HW_BAS_Result)
 
 
 
