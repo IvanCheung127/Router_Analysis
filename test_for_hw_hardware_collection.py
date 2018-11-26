@@ -1,6 +1,7 @@
 import re
 
 
+
 test1 = '''<SC-PZH-MD-BAS-1.MAN.ME60>display device pic-status 
 Pic-status information in Chassis 1:
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -26,7 +27,14 @@ SLOT PIC Status     Type                   Port_count Init_result   Logic_down
 13   0   Registered DVSU_SP_CARD           0          SUCCESS       SUCCESS     
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'''
 
-data_split_mid_1 = re.split('Logic_down|\n\-',test1)[2]
-print(data_split_mid_1)
+data_split_mid = re.split('Logic_down\s*\n|\n\-',test1)[2].split('\n')
+print(data_split_mid)
+daughter_card_num = len(data_split_mid)
+print(daughter_card_num)
+cur_dcard_num = 0
+while cur_dcard_num < daughter_card_num:
+    cur_info_split = data_split_mid[cur_dcard_num].split()
+    print(cur_info_split)
+    #int(cur_info_split[4])-1
+    cur_dcard_num+=1
 
-port_info=[]
