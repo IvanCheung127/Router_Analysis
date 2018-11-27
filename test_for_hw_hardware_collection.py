@@ -32,9 +32,15 @@ print(data_split_mid)
 daughter_card_num = len(data_split_mid)
 print(daughter_card_num)
 cur_dcard_num = 0
+hardware_info = []
 while cur_dcard_num < daughter_card_num:
     cur_info_split = data_split_mid[cur_dcard_num].split()
     print(cur_info_split)
-    #int(cur_info_split[4])-1
+    if cur_info_split[3]!='DVSU_SP_CARD':
+        i=0
+        while i <= (int(cur_info_split[4])-1):
+            slot_num='{Card_num}/{DCard_num}/{Port_Num}'.format(Card_num=cur_info_split[0],DCard_num=cur_info_split[1],Port_Num=i)
+            print(slot_num)
+            i+=1
     cur_dcard_num+=1
 
