@@ -158,13 +158,14 @@ Eth12/1/1 LTX1305-BC+        N5671A18274      Hisense           9900Mb/s-1310nm-
 data_split_mid_1 = re.split('=\n',test1)
 data_split_mid_2 = data_split_mid_1[1].split()
 count = 0
-port_type_sum = []
+Port_Type_Sum = []
 while count <len(data_split_mid_2):
     if re.match(r'[a-zA-Z]+\d+\/\d+\/+\d+',data_split_mid_2[count]) is not None:
-        slot_num = data_split_mid_2[count]
-        port_type = data_split_mid_2[count+1]
-        port_type_sum.append([slot_num,port_type])
+        print(data_split_mid_2[count])
+        Slot_Num = re.sub('[a-zA-Z]+', '', data_split_mid_2[count])
+        Port_Type = data_split_mid_2[count+1]
+        Port_Type_Sum.append([Slot_Num,Port_Type])
 
     count += 1
 
-print(port_type_sum)
+print(Port_Type_Sum)

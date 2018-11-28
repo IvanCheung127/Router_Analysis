@@ -45,8 +45,8 @@ while cur_dcard_num < daughter_card_num:
             Phy_Status = ''
             Pro_Status = ''
             Port_Desc = ''
-            Port_IP = ''
-            hardware_info.append([slot_num,Card_Type,DCard_Type,Optical_Type,Phy_Status,Phy_Status,Port_Desc,Port_IP])
+            Port_BW = ''
+            hardware_info.append([slot_num,Card_Type,DCard_Type,Optical_Type,Phy_Status,Phy_Status,Port_Desc,Port_BW])
             i += 1
     cur_dcard_num += 1
 print(hardware_info)
