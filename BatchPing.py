@@ -14,7 +14,7 @@ with open('ip.txt', 'rt', encoding='utf-8') as ip_list:
             normal += 1
         else:
             bad += 1
-            Bad_IP.append(cur_ip)
+            Bad_IP.append(cur_ip.strip('\n'))
 
         count += 1
 
