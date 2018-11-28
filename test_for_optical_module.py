@@ -159,7 +159,6 @@ data_split_mid_1 = re.split('=\n',test1)
 data_split_mid_2 = data_split_mid_1[1].split()
 count = 0
 port_type_sum = []
-print(len(data_split_mid_2))
 while count <len(data_split_mid_2):
     if re.match(r'[a-zA-Z]+\d+\/\d+\/+\d+',data_split_mid_2[count]) is not None:
         slot_num = data_split_mid_2[count]
