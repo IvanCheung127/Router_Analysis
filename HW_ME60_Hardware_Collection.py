@@ -103,88 +103,96 @@ def Port_Collection(data):
 # 包含打开文件->分段配置->解析输出各部分结果->拼接入excel表
 
 def Main_Process():
-    file_path = tkinter.filedialog.askopenfilename()
-    if file_path is not '':
-        per_port_total = []
-        with open(file_path, 'rt', encoding='utf-8') as default_file:
-            split_config = re.split(r'\<\S+\>', default_file.read())
-            for config_content in split_config:
-                if "display elabel brief" in config_content:
-                    MCard_Info = MCard_Collection(config_content)
-                    print(MCard_Info)
-                elif "display device pic-status" in config_content:
-                    DCard_Info = DCard_Collection(config_content)
-                    print(DCard_Info)
-                elif "display elabel optical-module brief" in config_content:
-                    OpticalModule_Info = OpticalModule_Collection(config_content)
-                    print(OpticalModule_Info)
-                elif "display interface description" in config_content:
-                    Port_Description_Info = Port_Collection(config_content)
-                    print(Port_Description_Info)
+    file_paths = tkinter.filedialog.askopenfilenames()
+    if file_paths is not '':
+        for file_path in file_paths:
+            per_port_total = []
+            dev_name = ''
+            with open(file_path, 'rt', encoding='utf-8') as default_file:
+                split_config = re.split(r'(\<\S+\>)', default_file.read())
+                for config_content in split_config:
+                    if "<" and ">" in config_content:
+                        dev_name = config_content.strip("<|>")
+                        print(dev_name)
+                    elif "display elabel brief" in config_content:
+                        MCard_Info = MCard_Collection(config_content)
+                        print(MCard_Info)
+                    elif "display device pic-status" in config_content:
+                        DCard_Info = DCard_Collection(config_content)
+                        print(DCard_Info)
+                    elif "display elabel optical-module brief" in config_content:
+                        OpticalModule_Info = OpticalModule_Collection(config_content)
+                        print(OpticalModule_Info)
+                    elif "display interface description" in config_content:
+                        Port_Description_Info = Port_Collection(config_content)
+                        print(Port_Description_Info)
             default_file.close()
 
-        for per_DCard_sum in DCard_Info:
-            slot_num = per_DCard_sum[0].split('/')[0]
-            mcard_module = ''
-            dcard_module = per_DCard_sum[1]
-            port_num = per_DCard_sum[0]
-            port_module = ''
-            port_BW = ''
-            port_PHY = ''
-            port_Pro = ''
-            port_desc = ''
-            for per_MCard_sum in MCard_Info:
-                if slot_num == per_MCard_sum[0]:
-                    mcard_module = per_MCard_sum[1]
-            for per_Optical_sum in OpticalModule_Info:
-                if port_num == per_Optical_sum[0]:
-                    port_module = per_Optical_sum[1]
-            for per_port_desc in Port_Description_Info:
-                if port_num == per_port_desc[0]:
-                    port_BW = per_port_desc[1]
-                    port_PHY = per_port_desc[2]
-                    port_Pro = per_port_desc[3]
-                    port_desc = per_port_desc[4]
+            for per_DCard_sum in DCard_Info:
+                slot_num = per_DCard_sum[0].split('/')[0]
+                mcard_module = ''
+                dcard_module = per_DCard_sum[1]
+                port_num = per_DCard_sum[0]
+                port_module = ''
+                port_BW = ''
+                port_PHY = ''
+                port_Pro = ''
+                port_desc = ''
+                for per_MCard_sum in MCard_Info:
+                    if slot_num == per_MCard_sum[0]:
+                        mcard_module = per_MCard_sum[1]
+                for per_Optical_sum in OpticalModule_Info:
+                    if port_num == per_Optical_sum[0]:
+                        port_module = per_Optical_sum[1]
+                for per_port_desc in Port_Description_Info:
+                    if port_num == per_port_desc[0]:
+                        port_BW = per_port_desc[1]
+                        port_PHY = per_port_desc[2]
+                        port_Pro = per_port_desc[3]
+                        port_desc = per_port_desc[4]
 
-            per_port_total.append(
-                [slot_num, mcard_module, dcard_module, port_module, port_num, port_BW, port_PHY, port_Pro, port_desc])
+                per_port_total.append(
+                    [slot_num, mcard_module, dcard_module, port_module, port_num, port_BW, port_PHY, port_Pro,
+                     port_desc])
 
-        print(per_port_total)
+            print(per_port_total)
 
-        # 生成输出excel
-        hwwb = Workbook()
+            # 生成输出excel
+            hwwb = Workbook()
 
-        hwportsheet = hwwb.active
+            hwportsheet = hwwb.active
 
-        hwportsheet.title = "设备通路图(已有端口硬件调研)"
-        # 编写sheet的列头：
-        hwportsheet['A1'].value = '槽位号'
-        hwportsheet['B1'].value = '母卡型号'
-        hwportsheet['C1'].value = '子卡型号'
-        hwportsheet['D1'].value = '光模块型号'
-        hwportsheet['E1'].value = '端口号'
-        hwportsheet['F1'].value = '端口带宽'
-        hwportsheet['G1'].value = '端口物理状态'
-        hwportsheet['H1'].value = '端口协议状态'
-        hwportsheet['I1'].value = '端口描述'
+            hwportsheet.title = "设备通路图(已有端口硬件调研)"
+            # 编写sheet的列头：
+            hwportsheet['A1'].value = '槽位号'
+            hwportsheet['B1'].value = '母卡型号'
+            hwportsheet['C1'].value = '子卡型号'
+            hwportsheet['D1'].value = '光模块型号'
+            hwportsheet['E1'].value = '端口号'
+            hwportsheet['F1'].value = '端口带宽'
+            hwportsheet['G1'].value = '端口物理状态'
+            hwportsheet['H1'].value = '端口协议状态'
+            hwportsheet['I1'].value = '端口描述'
 
-        # 以下为批量转化list型变量内容到xlsx文件对应位置
+            # 以下为批量转化list型变量内容到xlsx文件对应位置
 
-        for row1 in range(2, len(per_port_total) + 2):  # 写入数据
-            for col1 in range(1, len(per_port_total[row1 - 2]) + 1):
-                _ = hwportsheet.cell(row=row1, column=col1, value=str(per_port_total[row1 - 2][col1 - 1]))
+            for row1 in range(2, len(per_port_total) + 2):  # 写入数据
+                for col1 in range(1, len(per_port_total[row1 - 2]) + 1):
+                    _ = hwportsheet.cell(row=row1, column=col1, value=str(per_port_total[row1 - 2][col1 - 1]))
 
-        hwwb.save(filename="通路图分析结果.xlsx")
-        hwwb.close()
+            hwwb.save(filename="%s 通路图分析结果.xlsx" % dev_name)
+            hwwb.close()
+
         tkinter.messagebox.showinfo("提示", "华为ME60通路图生成完毕！")
     else:
         tkinter.messagebox.showinfo("提示", "请重新选择采集文件！")
         return
 
+
 def about_message():
-    message_content = ('''适用设备：ME60\n使用方法：请将如下命令一字不差的在设备上运行,保存log程序分析使用\nscreen-length 0 tem\ndisplay elabel brief\ndisplay device pic-status\ndisplay elabel optical-module brief\ndisplay interface description  | exclude [0-9]*\/*[0-9]*\/*[0-9]+\.[0-9]+\n
+    message_content = ('''作者：张轶凡\n版本：V1.0\n适用设备：ME60\n使用方法：请将如下命令一字不差的在设备上运行,保存log供程序分析使用\nscreen-length 0 tem\ndisplay elabel brief\ndisplay device pic-status\ndisplay elabel optical-module brief\ndisplay interface description  | exclude [0-9]*\/*[0-9]*\/*[0-9]+\.[0-9]+\n
 ''')
-    messagebox.showinfo("使用帮助", message_content,)
+    messagebox.showinfo("使用帮助", message_content, )
 
 
 class App(object):
