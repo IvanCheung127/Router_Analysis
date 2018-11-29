@@ -1,5 +1,6 @@
 import re
 import tkinter.filedialog
+from tkinter import Button, Tk, messagebox
 from openpyxl import Workbook
 
 
@@ -174,6 +175,29 @@ def Main_Process():
                 _ = hwportsheet.cell(row=row1, column=col1, value=str(per_port_total[row1 - 2][col1 - 1]))
 
         hwwb.save(filename="通路图分析结果.xlsx")
+        hwwb.close()
+        tkinter.messagebox.showinfo("提示", "华为ME60通路图生成完毕！")
+    else:
+        tkinter.messagebox.showinfo("提示", "请重新选择采集文件！")
+        return
+
+def about_message():
+    message_content = ('''适用设备：ME60\n使用方法：请将如下命令一字不差的在设备上运行,保存log程序分析使用\nscreen-length 0 tem\ndisplay elabel brief\ndisplay device pic-status\ndisplay elabel optical-module brief\ndisplay interface description  | exclude [0-9]*\/*[0-9]*\/*[0-9]+\.[0-9]+\n
+''')
+    messagebox.showinfo("使用帮助", message_content,)
 
 
-Main_Process()
+class App(object):
+    def __init__(self, master):
+        self.com1 = Button(master, text='使用帮助', command=about_message, width=25)
+        self.com1.pack()
+        self.com2 = Button(master, text='华为ME60通路图生成', command=Main_Process, width=25)
+        self.com2.pack()
+
+
+root = Tk()
+root.title('通路图生成')
+root.geometry("300x100")
+
+app = App(root)
+root.mainloop()

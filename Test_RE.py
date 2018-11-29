@@ -1,2 +1,3 @@
 import re
-print(re.match(r'[a-zA-Z]+\d+\/\d+\/+\d+', 'pos1/0/0'))
+a='1/0/0'
+print(a.split('/')[0])
