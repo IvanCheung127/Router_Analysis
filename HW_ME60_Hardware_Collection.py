@@ -122,12 +122,12 @@ def Main_Process():
                     print(Port_Description_Info)
             default_file.close()
 
-        for per_port_sum in OpticalModule_Info:
-            slot_num = per_port_sum[0].strip('\/')[0]
+        for per_DCard_sum in DCard_Info:
+            slot_num = per_DCard_sum[0].split('/')[0]
             mcard_module = ''
-            dcard_module = ''
-            port_num = per_port_sum[0]
-            port_module = per_port_sum[1]
+            dcard_module = per_DCard_sum[1]
+            port_num = per_DCard_sum[0]
+            port_module = ''
             port_BW = ''
             port_PHY = ''
             port_Pro = ''
@@ -135,9 +135,9 @@ def Main_Process():
             for per_MCard_sum in MCard_Info:
                 if slot_num == per_MCard_sum[0]:
                     mcard_module = per_MCard_sum[1]
-            for per_DCard_sum in DCard_Info:
-                if port_num == per_DCard_sum[0]:
-                    dcard_module = per_DCard_sum[1]
+            for per_Optical_sum in OpticalModule_Info:
+                if port_num == per_Optical_sum[0]:
+                    port_module = per_Optical_sum[1]
             for per_port_desc in Port_Description_Info:
                 if port_num == per_port_desc[0]:
                     port_BW = per_port_desc[1]
